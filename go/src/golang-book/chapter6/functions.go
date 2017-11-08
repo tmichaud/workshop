@@ -10,6 +10,21 @@ func add(args ...int) int {
 	}
 	return total
 }
+
+func max(args ...int) int {
+	max := args[0]
+	for _, v := range args {
+		if v > max {
+			max = v
+		}	
+	}
+	return max
+}
+
+func evenOrOdd(x int) (int, bool) {
+	return x /2 , x % 2 == 0	
+}
+
 func f() (int,int) {
 	return 5,6
 }
@@ -24,6 +39,7 @@ func average(scores []float64) float64 {
 	return total / float64(len(scores))
 
 }
+
 func makeEvenGenerator() func() uint {
 	i := uint(0)  // Note: i keeps it state below....
 	return func() (ret uint) {
@@ -33,11 +49,30 @@ func makeEvenGenerator() func() uint {
 	}
 }
 
+func makeOddGenerator() func() uint {
+	j := uint(1)
+	return func() (ret uint) {
+		ret = j
+		j += 2
+		return
+	}
+}
+
 func factorial(x uint) uint {
 	if x == 0 {
 		return 1
 	}
 	return x * factorial(x - 1)
+}
+
+func fibonacci(x uint) uint {
+	if x == 0 {
+		return 0
+	}
+	if x == 1 {
+		return 1
+	}
+	return x + fibonacci(x-1)
 }
 
 func first() {
@@ -74,6 +109,25 @@ func testpanic2(msg string) {
 func testpanic3(msg string) {
 	defer catchPanic()
 }
+
+func zero(xPtr *int) {
+	*xPtr = 0
+}
+
+func one(xPtr *int) {
+	*xPtr = 1
+}
+
+
+func square(x *float64) {
+	*x = *x * *x
+}
+
+func swap(x *int, y *int) {
+	tmp := *x
+	*x = *y
+	*y = tmp
+}	
 
 func main() {
 	fmt.Println("-----------------------------------")
@@ -180,11 +234,59 @@ func main() {
 	fmt.Println("-----------------------------------")
 	fmt.Println("-----------------------------------")
 	
+	xp := 5
+	zero(&xp)
+	fmt.Println("X was 5....now should be 0", xp)
+
+	xPtr := new(int)
+	fmt.Println("xPtr should now be 0  (note with new we had to use '*')", *xPtr)	
+	one(xPtr)
+	fmt.Println("xPtr should now be 1  (note with new we had to use '*')", *xPtr)	
+
+        fmt.Println("-----------------------------------")
+	fmt.Println("-----------------------------------")
+	fmt.Println(" Exercises                         ")
+	fmt.Println("-----------------------------------")
+	fmt.Println("-----------------------------------")
+	
+	fmt.Println(" #1 -- see add func above ")
+	eoo, flag := evenOrOdd(1)	
+	fmt.Println(" #2 1 returns " , eoo, flag )
+	eoo, flag = evenOrOdd(2)	
+	fmt.Println(" #2 2 returns " , eoo, flag ) 
 
 
+	fmt.Println(" #3 max (4, -3, 5, -1)  returns " , max(4, -3, 5, -1) ) 
+	
+        nextOdd := makeOddGenerator()  // Because of how we declare it here - it keeps state?
+	fmt.Println(" #4  nextOdd is (should be 1) ", nextOdd())
+	fmt.Println(" #4  nextOdd is (should be 3) ", nextOdd())
+	fmt.Println(" #4  nextOdd is (should be 5) ", nextOdd())
 
+	fmt.Println(" #5   Fibonacci 3  (should be 6) ", fibonacci(3))
+	fmt.Println(" #5   Fibonacci 4 (should be 10) ", fibonacci(4))
+	fmt.Println(" #5   Fibonacci 5 (should be 15) ", fibonacci(5))
 
+	ex10 := 1.5
+	fmt.Println(" #10  x initial 1.5 (", ex10, ")")
+	square(&ex10)
+	fmt.Println(" #10  x becomes (3/2 * 3/2 = 9/4 or 2.25?) (", ex10, ")")
 
+	ex11x := 1
+	ex11y := 2
+	
+	fmt.Println(" #11 ex11x = (", ex11x, ")   ex11y = (", ex11y, ")")
+	swap(&ex11x, &ex11y)
+	fmt.Println(" #11 ex11x = (", ex11x, ")   ex11y = (", ex11y, ")")
+	
+	fmt.Println("")
+	fmt.Println("")
+	fmt.Println("")
+        fmt.Println("-----------------------------------")
+	fmt.Println("-----------------------------------")
+	fmt.Println(" Deferrred functions               ")
+	fmt.Println("-----------------------------------")
+	fmt.Println("-----------------------------------")
 
 	
 }
