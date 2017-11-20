@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Learning Spring Boot: Spring-A-Gram</title>
+	<link rel="stylesheet" href="/main.css" />
+</head>
+<body>
+	<h3 th:if="${#vars['Flash.message']}" th:text="${#vars['Flash.message']}" class="flash"></h3>
+	<div>
+			<h3 th:text="${page.number + 1} + ' of ' + ${page.totalPages}" />
+			<table>
+				<thead>
+					<tr>
+						<th>Id</th><th>Name</th><th>Image</th><th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="image : ${page.content}" >
+						<td th:text="${image.id}" />
+						<td th:text="${image.name}" />
+						<td><img th:src="@{'/images/' + ${image.name} + '/raw' }" class="thumbnail" /> </td>
+						<td>
+							<form th:method="delete" th:action="@{'/images/' + ${image.name}}" >
+								<input type="submit" value="Delete" />
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<form method="post" enctype="multipart/form-data" action="/images">
+				<p><input type="file" name="file" /></p>
+				<p><input type="submit" name="Upload" /></p>
+			</form>
+	</div>
+</body>
+</html>
